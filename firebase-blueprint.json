@@ -1,0 +1,236 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile in AETHER X.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the user." },
+        "displayName": { "type": "string", "description": "Display name." },
+        "email": { "type": "string", "description": "User email (owner-only PII)." },
+        "roleTitle": { "type": "string", "description": "User cosmic role or specialty." },
+        "bio": { "type": "string", "description": "Short user bio." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp." }
+      },
+      "required": ["userId", "displayName", "createdAt", "updatedAt"]
+    },
+    "World": {
+      "title": "World",
+      "description": "An interactive 3D planet workspace in the Infinity Engine.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "description": "Owner UID." },
+        "memberUids": { "type": "array", "description": "Authorized member UIDs." },
+        "name": { "type": "string", "description": "World name." },
+        "description": { "type": "string", "description": "World description." },
+        "colorHex": { "type": "string", "description": "Planet accent hex color." },
+        "category": { "type": "string", "description": "World domain category." },
+        "connectedWorldIds": { "type": "array", "description": "Connected world IDs." },
+        "orbitRadius": { "type": "number", "description": "3D orbit radius." },
+        "orbitAngle": { "type": "number", "description": "3D initial orbit angle in radians." },
+        "planetScale": { "type": "number", "description": "3D planet scale." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp." }
+      },
+      "required": ["ownerId", "memberUids", "name", "colorHex", "category", "createdAt", "updatedAt"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A project residing inside a Digital World.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "worldId": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "status": { "type": "string", "enum": ["planning", "active", "completed", "archived"] },
+        "progress": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "memberUids", "worldId", "title", "status", "progress", "createdAt", "updatedAt"]
+    },
+    "TaskItem": {
+      "title": "TaskItem",
+      "description": "An actionable task inside a World or Project.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "worldId": { "type": "string" },
+        "projectId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["todo", "in_progress", "done"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "assignedAgent": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "memberUids", "worldId", "title", "status", "priority", "createdAt", "updatedAt"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "Collaboration team for shared Worlds.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "worldId": { "type": "string" },
+        "inviteCode": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "memberUids", "name", "inviteCode", "createdAt", "updatedAt"]
+    },
+    "TeamMembership": {
+      "title": "TeamMembership",
+      "description": "Role-based membership linking users and teams.",
+      "type": "object",
+      "properties": {
+        "teamId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["owner", "administrator", "editor", "viewer"] },
+        "status": { "type": "string", "enum": ["active", "invited"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["teamId", "ownerId", "userId", "displayName", "role", "status", "createdAt", "updatedAt"]
+    },
+    "Activity": {
+      "title": "Activity",
+      "description": "Append-only activity feed entry across Worlds and teams.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "worldId": { "type": "string" },
+        "actorName": { "type": "string" },
+        "action": { "type": "string" },
+        "category": { "type": "string", "enum": ["world", "project", "task", "agent", "team", "market"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "memberUids", "actorName", "action", "category", "createdAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Saved AI Civilization or Aether Voice conversation.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "worldId": { "type": "string" },
+        "agentId": { "type": "string" },
+        "title": { "type": "string" },
+        "prompt": { "type": "string" },
+        "responseSummary": { "type": "string" },
+        "isVoice": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "agentId", "title", "prompt", "responseSummary", "isVoice", "createdAt", "updatedAt"]
+    },
+    "AgentRun": {
+      "title": "AgentRun",
+      "description": "Multi-agent AI orchestration run record.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "worldId": { "type": "string" },
+        "taskPrompt": { "type": "string" },
+        "selectedAgents": { "type": "array" },
+        "agentOutputs": { "type": "object" },
+        "consolidatedResult": { "type": "string" },
+        "status": { "type": "string", "enum": ["running", "completed", "failed"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "taskPrompt", "selectedAgents", "agentOutputs", "consolidatedResult", "status", "createdAt", "updatedAt"]
+    },
+    "MarketplaceItem": {
+      "title": "MarketplaceItem",
+      "description": "Digital creation or template published in Nexus Market.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "coverKey": { "type": "string" },
+        "tags": { "type": "array" },
+        "favoriteUids": { "type": "array" },
+        "isPublic": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "creatorName", "title", "description", "category", "coverKey", "isPublic", "createdAt", "updatedAt"]
+    },
+    "NotificationItem": {
+      "title": "NotificationItem",
+      "description": "User notification in Command Center.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "category": { "type": "string", "enum": ["system", "agent", "team", "world"] },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "title", "message", "category", "isRead", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authenticated user profile documents."
+    },
+    "/worlds/{worldId}": {
+      "schema": { "$ref": "#/entities/World" },
+      "description": "Digital Worlds represented as planets in the 3D universe."
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Projects belonging to a Digital World."
+    },
+    "/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/TaskItem" },
+      "description": "Tasks belonging to a Project or World."
+    },
+    "/teams/{teamId}": {
+      "schema": { "$ref": "#/entities/Team" },
+      "description": "Collaboration teams."
+    },
+    "/team_memberships/{membershipId}": {
+      "schema": { "$ref": "#/entities/TeamMembership" },
+      "description": "Role-based team memberships."
+    },
+    "/activities/{activityId}": {
+      "schema": { "$ref": "#/entities/Activity" },
+      "description": "Activity feed events."
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "AI agent and voice conversation history."
+    },
+    "/agent_runs/{runId}": {
+      "schema": { "$ref": "#/entities/AgentRun" },
+      "description": "Multi-agent orchestration runs."
+    },
+    "/marketplace_items/{itemId}": {
+      "schema": { "$ref": "#/entities/MarketplaceItem" },
+      "description": "Nexus Market templates and digital creations."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/NotificationItem" },
+      "description": "Command Center notifications."
+    }
+  }
+}
